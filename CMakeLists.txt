@@ -18,6 +18,9 @@ add_executable(${ProjectName}
 #     ooo.cpp
 # )
 
+# Add sub modules
+add_subdirectory(./calculator)
+target_link_libraries(${ProjectName} Calculator)
 
 # Add test module
 option(BUILD_TESTS "BUILD_TESTS" ON)

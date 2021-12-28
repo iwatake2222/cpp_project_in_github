@@ -12,38 +12,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
+#ifndef CALCULATOR_H_
+#define CALCULATOR_H_
+
 /*** Include ***/
 /* for general */
 #include <cstdint>
 #include <cstdio>
-#include <iostream>
 #include <memory>
 #include <vector>
-#include <string>
+#include <array>
 
-#include "calculator.h"
-
-/*** Macro ***/
-
-/*** Setting ***/
-
-/*** Global variable ***/
-
-/*** Function ***/
-int main(int argc, char* argv[])
+class Calculator
 {
-    char op;
-    int32_t a = 0;
-    int32_t b = 0;
-    std::cout << ">";
-    std::cin >> a >> op  >> b;
-    Calculator calc;
-    int32_t ans = calc.Run(op, a, b);
-    std::cout << std::to_string(a) + " " + op + " " + std::to_string(b) + " = " + std::to_string(ans) << std::endl;
+public:
+    Calculator();
+    ~Calculator();
+    int32_t Run(char op, int32_t a, int32_t b);
 
-    /* Cause security warning */
-    // char buffer[1];
-    // buffer[3] = 1;
+};
 
-    return 0;
-}
+#endif
