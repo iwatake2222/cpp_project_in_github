@@ -1,0 +1,75 @@
+name: CMake_x64
+
+on:
+  push:
+    tags: '*'
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    timeout-minutes: 10
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            exe_name: main
+            artifact_name: main_linux_x64.tgz
+          - os: windows-latest
+            exe_name: main.exe
+            artifact_name: main_windows_x64.zip
+          - os: macOS-latest
+            exe_name: main
+            artifact_name: main_mac_darwin.tgz
+
+    steps:
+    - uses: actions/checkout@v2
+      # with:
+      #   fetch-depth: 1
+      #   submodules: recursive
+    - name: Checkout Submodules  # To avoid "RPC failed; curl 56 GnuTLS recv error (-54): Error in the pull function."
+      run: |
+        git config --global http.postBuffer 100M
+        git submodule update --init --recursive --recommend-shallow --depth 1
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{env.BUILD_TYPE}}
+
+    - name: Package
+      shell: bash
+      run: |
+        ls  '${{github.workspace}}/build'
+        if [[ "${{ matrix.os }}" == "windows-latest" ]]
+        then
+          7z a ${{ matrix.artifact_name }} '${{github.workspace}}/build/Release/${{ matrix.exe_name }}'
+        else
+          tar czvf ${{ matrix.artifact_name }} ${{github.workspace}}/build/${{ matrix.exe_name }}
+        fi
+        ls
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: ${{ matrix.artifact_name }}
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        body_path: CHANGELOG.md
+        files: |
+          ${{ matrix.artifact_name }}
+          LICENSE
+          NOTICE.md
+
