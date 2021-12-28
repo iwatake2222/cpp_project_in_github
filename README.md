@@ -1,6 +1,13 @@
 # Awesome C++ Project in GitHub
 - Create a simple calculator
 
+## CI Status
+Status | Build Type
+------ | ----------
+[![CMake_x64](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_x64.yml/badge.svg)](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_x64.yml) | windows-latest, ubuntu-latest, macos-latest
+[![CMake_ARM](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_arm.yml/badge.svg)](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_arm.yml) | armv7 + ubuntu18.04, aarch64 + ubuntu18.04
+[![CodeQL](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/codeql-analysis.yml) | ubuntu-latest
+
 ## How to Run
 ### Linux
 ```sh
