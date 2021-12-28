@@ -48,6 +48,8 @@ int32_t Calculator::Run(char op, int32_t a, int32_t b)
         return a + b;
     case '-':
         return a - b;
+    case '*':
+        return a * b;
     default:
         throw std::invalid_argument(std::string("Unsupported op: [") + op + "]");
     }
