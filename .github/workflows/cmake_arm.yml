@@ -1,0 +1,93 @@
+name: CMake_ARM
+
+on:
+  push:
+    tags: '*'
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    timeout-minutes: 20
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        include:
+          - arch: armv7
+            distro: ubuntu18.04
+            exe_name: main
+            artifact_name: main_linux_armv7.tgz
+          - arch: aarch64
+            distro: ubuntu18.04
+            exe_name: main
+            artifact_name: main_linux_aarch64.tgz
+
+    steps:
+    - uses: actions/checkout@v2
+      # with:
+      #   fetch-depth: 1
+      #   submodules: recursive
+    - name: Checkout Submodules  # To avoid "RPC failed; curl 56 GnuTLS recv error (-54): Error in the pull function."
+      run: |
+        git config --global http.postBuffer 100M
+        git submodule update --init --recursive --recommend-shallow --depth 1
+
+    - uses: uraimo/run-on-arch-action@v2.0.5
+      name: Build
+      id: build
+      with:
+        arch: ${{ matrix.arch }}
+        distro: ${{ matrix.distro }}
+        githubToken: ${{ github.token }}
+        shell: /bin/sh
+        setup: |
+          mkdir -p ${PWD}/artifacts
+        dockerRunArgs: |
+          --volume ${PWD}/artifacts:/artifacts
+        env: | # YAML, but pipe character is necessary
+          exe_name: ${{ matrix.exe_name }}
+          artifact_name: ${{ matrix.artifact_name }}
+        install: |
+          case "${{ matrix.distro }}" in
+            ubuntu*|jessie|stretch|buster|bullseye)
+              apt-get update -q -y
+              apt-get install -q -y git g++ cmake
+              ;;
+            fedora*)
+              dnf -y update
+              dnf -y install git which
+              ;;
+            alpine*)
+              apk update
+              apk add git
+              ;;
+          esac
+
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+          ctest
+          tar czvf ${artifact_name} ${exe_name} 
+          cp ${artifact_name} /artifacts/${artifact_name}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: ./artifacts/${{ matrix.artifact_name }}
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        body_path: CHANGELOG.md
+        files: |
+          ./artifacts/${{ matrix.artifact_name }}
+          LICENSE
+          NOTICE.md
