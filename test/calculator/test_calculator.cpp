@@ -16,34 +16,50 @@ limitations under the License.
 /* for general */
 #include <cstdint>
 #include <cstdio>
-#include <iostream>
-#include <memory>
 #include <vector>
+#include <array>
 #include <string>
+#include <memory>
+#include <stdexcept>
+
+/* GoogleTest */
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "calculator.h"
 
-/*** Macro ***/
+namespace {
+#if 0
+}    // indent guard
+#endif
 
-/*** Setting ***/
 
-/*** Global variable ***/
 
-/*** Function ***/
-int main(int argc, char* argv[])
+class TestCalculator : public testing::Test
 {
-    char op;
-    int32_t a = 0;
-    int32_t b = 0;
-    std::cout << ">";
-    std::cin >> a >> op  >> b;
-    Calculator calc;
-    int32_t ans = calc.Run(op, a, b);
-    std::cout << std::to_string(a) + " " + op + " " + std::to_string(b) + " = " + std::to_string(ans) << std::endl;
+protected:
+    TestCalculator() {
+        // You can do set-up work for each test here.
+    }
 
-    /* Cause security warning */
-    // char buffer[1];
-    // buffer[3] = 1;
+    ~TestCalculator() override {
+        // You can do clean-up work that doesn't throw exceptions here.
+    }
 
-    return 0;
+    void SetUp() override {
+        // Code here will be called immediately after the constructor (right
+        // before each test).
+    }
+
+    void TearDown() override {
+        // Code here will be called immediately after each test (right
+        // before the destructor).
+    }
+};
+
+TEST_F(TestCalculator, BasicTest)
+{
+    EXPECT_TRUE(true);
+}
+
 }
