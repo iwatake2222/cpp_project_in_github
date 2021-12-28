@@ -7,6 +7,7 @@
 mkdir -p build && cd build
 cmake ..
 make
+ctest
 ./main
 ```
 
@@ -16,6 +17,11 @@ make
 - Normal execution
     - Set `main` as a startup project
     - Run
+- Test
+    - Open Test Explorer
+    - Run All Tests
+
+![](00_doc/test_in_vs.jpg)
 
 # License
 - Awesome C++ Project in GitHub

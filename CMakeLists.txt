@@ -17,3 +17,11 @@ add_executable(${ProjectName}
 # target_sources(${ProjectName} PRIVATE 
 #     ooo.cpp
 # )
+
+
+# Add test module
+option(BUILD_TESTS "BUILD_TESTS" ON)
+if (BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(./test)
+endif()
