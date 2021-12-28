@@ -62,4 +62,17 @@ TEST_F(TestCalculator, BasicTest)
     EXPECT_TRUE(true);
 }
 
+TEST_F(TestCalculator, Add)
+{
+    Calculator calc;
+    EXPECT_EQ(0, calc.Run('+', 0, 0));
+    EXPECT_EQ(1, calc.Run('+', 0, 1));
+    EXPECT_EQ(1, calc.Run('+', 1, 0));
+    EXPECT_EQ(-1, calc.Run('+', 0, -1));
+    EXPECT_EQ(-1, calc.Run('+', -1, 0));
+    EXPECT_EQ(20, calc.Run('+', 10, 10));
+    EXPECT_EQ(30, calc.Run('+', 10, 20));
+    EXPECT_EQ(30, calc.Run('+', 20, 10));
+}
+
 }
