@@ -10,7 +10,7 @@ assignees: ''
 ## Please read this section before you create an issue
 - Fill out all the following sections. If not applicable, leave the section blank or "None"
 - Delete this section and explanation text in each section after you write your description
-- Consider to use code blocks ( \` \` , \`\`\`  \`\`\` )
+- Use code blocks ( \` \` , \`\`\`  \`\`\` )
 
 ## The reason **WHY** this new feature is needed
 - Describe why this feature would be useful
