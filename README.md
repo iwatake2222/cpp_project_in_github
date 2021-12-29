@@ -53,10 +53,10 @@ ctest
 
 # GitHubでC++プロジェクトを開発する際にやっておきたい設定
 - 簡単な電卓アプリ開発を例に、以下を行います
-    - GitHub上でのIssueテンプレート、マイルストーン、Projectsの設定
+    - GitHub上でのIssueテンプレート、マイルストーン、Projects(カンバンボード)の設定
     - GitHub Flowを例にした簡単な開発の流れの説明
     - CMakeを用いた、C++プロジェクトの用意
-    - Google Testを用いたUnitTestの導入
+    - GoogleTestを用いたUnit Testの導入
     - GitHub Actionsを用いた、CI/CDの導入
         - クロスプラットフォーム (Windows, Linux, MacOS, Linux(ARM))
     - GitHub Actionsを用いた、コードの静的解析
@@ -81,12 +81,12 @@ ctest
 
 *趣味の開発の場合は、上記のようなものを作りたいと、何となく頭に浮かんできた、という状態をイメージしてください。この場合スケジュールはないと思います。(それでもある程度の目標はあった方がよいかと思いますが)
 
-# GitHub上でプロジェクトを用意する
+# GitHub上でリポジトリを用意する
 ## GitHubのNew repositoryからリポジトリを作る
 - 本記事では、最初にGitHubのwebサイト上でリポジトリを作ります (先にローカルで作っていても、後から追加できます)
     - 名前は、「cpp_project_in_github」とします
     - `README.md` 、`.gitignore` 、`LICENSE` を追加します
-    - これらは後でやっての良いのですが、出来るだけ早いタイミングでやるようにしましょう
+    - これらは後でやっても良いのですが、出来るだけ早いタイミングでやるようにしましょう
 
 ![](00_doc/create_repo_0.jpg)
 
@@ -96,8 +96,8 @@ ctest
 
 ## Issueテンプレートの設定
 - リポジトリもできたし、あとはcloneして開発開始だ! となる気持ちはわかるのですが、その前に諸々の設定をします
-- まずIssueテンプレートの設定をします。これによって、issueを作るときのひな形を用意します
-- issue(チケット)ドリブンで開発する際に、ちゃんとissueを書こうという気になります。また、プロジェクト公開後にクソみたいなissueを防ぐことにつながります
+- まずIssueテンプレートの設定をします。ここで、Issueを作るときのひな形を作ります
+- Issue(チケット)ドリブンで開発する際に、ちゃんとissueを書こうという気になります。また、プロジェクト公開後にクソみたいなissueを防ぐことにもつながります
 - リポジトリのトップページ -> Settings -> Options -> Features -> Issues -> Set up templates
 
 ![](00_doc/issue_template_1.jpg)
@@ -106,7 +106,9 @@ ctest
 - Add templateから、Bug reportとFeature requestを追加します
     - 他に必要そうなものがあればそれも追加します
 - 自分のプロジェクトにあった形式に編集します
-    - このとき、Issue default titleも設定しておくと後で見やすくなっておすすめです
+    - [feature request](https://github.com/iwatake2222/cpp_project_in_github/blob/3057c4186aee5470e41bc23ec6444e948c1c6999/.github/ISSUE_TEMPLATE/feature_request.md)
+    - [issue report](https://github.com/iwatake2222/cpp_project_in_github/blob/3057c4186aee5470e41bc23ec6444e948c1c6999/.github/ISSUE_TEMPLATE/issue-report.md)
+- このとき、Issue default titleも設定しておくと後で見やすくなっておすすめです
 - Propose changesで変更をcommitする
 
 ![](00_doc/issue_template_2.jpg)
@@ -132,7 +134,7 @@ ctest
 ![](00_doc/milestone_0.jpg)
 
 ## Projectsの設定
-- Issue(機能実装、バグ)のステータスを見やすくするため、Projectsを作成します。これはいわゆるKANBAN(Project board)です
+- Issue(機能実装、バグ)のステータスを見やすくするため、Projectを作成します。これはいわゆるKANBAN(Project board)です
 - 新しいProjects(beta)が最近追加されましたが、ここでは旧Projectsを使うことにします
     - 新しいProjects(beta)だとリスト表示や複数のビュー管理、ワークフロー設定ができるため便利そうです
     - が、Projects自体はユーザに紐づいて作成され、それをリポジトリに追加するという方針らしいです (複数リポジトリをまたいだ開発も想定しているためだと思います)
@@ -146,9 +148,10 @@ ctest
     - 2つめ
         - Project board name: Bug Tracking
         - Template: Bug triage
-- Projectsを作ると、最初にサンプルのノート(アイテム)がTo doの列に用意されるので消しておきます
-- 今回のFinal Releaseまでの通常の開発は全てCreate Simple Calculatorで見ることにします。アイテムが増えてくると、KANBANの列に入りきらず見づらくなるのですが、milestoneでフィルタをかけることができます。milestoneごとにProjectsを分けるのもありだとは思います。(が、実際はそんなうまいこと開発はすすまずに、やり残しのタスクが発生したりするので、同じにしておいた方が良いかと。。。)
-- 例えば将来の大幅アップデートや、リファクタリング、少し大規模な新規機能開発を行う際に、新しいProjectsを用意するとよいかと思います
+- Projectを作ると、最初にサンプルのノート(アイテム)がTo doの列に用意されるので消しておきます
+- 今回のFinal Releaseまでの通常の開発は全てこのCreate Simple CalculatorというKANBANで見ることにします。アイテムが増えてくると、KANBANの列に入りきらず見づらくなるのですが、milestoneでフィルタをかけることができます。milestoneごとにProjectsを分けるのもありだとは思います
+    - が、実際の開発ではスケジュール通りにタスクを消化することは難しく、やり残しが発生すると思います。なので、同じにしておいた方がよいかと。。。
+- 例えば将来の大幅アップデートや、リファクタリング、少し大規模な新規機能開発を行う際に、新しいProjectを用意するとよいかと思います
 
 ![](00_doc/projects_0.jpg)
 
@@ -161,10 +164,11 @@ ctest
 # Issueの追加
 - これでようやく下準備が整いました。ここまでの内容は、チーム開発の場合にはPM, PL, POがやることもあるかと思います
 - ここからいざ開発! といきたいのですが、その前にタスクリストとしてissueを作成しておきます
+    - この作業はチーム開発の場合は、PL, POあたりが音頭を取って、チームメンバーを含めてみんなでやるといいと思います。数時間程度かかります
 
 ## Issueの追加
 - リポジトリのトップページ -> Issues -> Feature requestから作成します
-    - Feature requestではないような気もしますが。。。気になる場合は別のissue templateを作成してください
+    - Feature 「request」ではないような気もしますが。。。気になる場合は別のissue templateを作成してください
 - 例えば以下のようなissueを追加します。環境整備系も追加しておきます
     - 空プロジェクトの用意
     - ユニットテスト環境の用意
@@ -200,7 +204,7 @@ ctest
     - (#は無いほうがいいかも)
 - ここでは `git checkout -b feature-#1-empty_project` とします
 
-## Hello worldプロジェクトを追加する
+## CMakeプロジェクトを作る
 - 「空プロジェクト」といっても、何かしらの動きはしてほしいので、適当にハローワールドを出します
 - また、CMakeLists.txtではgccのコンパイルオプションなども行います
 - このとき、使用するライセンスにもよりますが、ソースコードのヘッダにライセンス情報をつけることを忘れないようにします
@@ -216,7 +220,7 @@ ctest
 - 自分(またはチーム)の環境に合わせて変更してください
 - 僕はいつも以下を追加しています
 
-```
+```txt:.gitignore
 .vscode
 build/
 ```
@@ -225,7 +229,10 @@ build/
 
 ### NOTICE.mdの追加
 - このプロジェクトで使用している、他のOSSに関する情報を記載します
-- 現時点では無くても、とりあえずファイルを追加しておけばいざ必要になった時にどうしようかと悩んだり記載をサボることがなくなると思います
+    - ファイル名はこれでなくてもOKです
+    - LICENSEと一緒にしてもいいかもしれませんが、僕は分ける方が好きです (LICENSEファイルには自分のこのプロジェクト自体のライセンス情報だけを記載したい)
+    - READMEに記載してもいいかもしれませんが、増えてきたり、後々配布することを考慮すると別ファイルにしておいた方がいいです
+- 現時点では未使用でも、とりあえずファイルを追加しておけば、いざ必要になった時にどうしようかと悩んだり記載をサボることがなくなると思います
 
 ```txt: NOTICE.md
 ## ooo
@@ -276,6 +283,7 @@ git push origin master feature-#1-empty_project
 
 - メモ
     - プルリクもProjects boardで管理することができます。が、すでにissueを登録しているのでissueとプルリクが1:1で対応している場合には冗長かなとおもいます
+        - Review作業がある場合は、管理した方がいいかもしれません
     - プルリクのコメントに`Fix`や `Close`を含めることで、マージ後に自動的にissueが閉じます
     - commitメッセージに入れても同じ扱いになります。が、1つのissueに複数のcommitが入ることもあるので、プルリクのコメントに入れる方が僕は好きです
 
@@ -284,17 +292,20 @@ git push origin master feature-#1-empty_project
     - https://github.com/iwatake2222/cpp_project_in_github/pull/8
 - 終わったら、Delete branchします
 - 完了したらこのissueは自動的にClosedになります。また、Project board上でもDoneに移動します
-- また、自分のPC上でmasterブランチに戻り、git pullしておきます **大事**
+- また、自分のPC上でブランチに戻り、マージ後の最新コードを取得しておきます **大事**
+    - `git checkout master`
+    - `git pull`
 
 ![](00_doc/pullreq_1.jpg)
 
 # GitHub Flow
-- このようにブランチを切って開発し、プルリクを出してmasterブランチにマージしていく方式はGutHub Flowと呼ばれています
+- このようにtopicブランチを切って開発し、プルリクを出してmasterブランチにマージしていく方式はGutHub Flowと呼ばれています
 - 先ほどはその説明も記載したため長くなってしまいましたが、以後はgitやブランチ操作についての説明は省略します。が、ちゃんとやるようにしましょう
 
 
-# Google Testを用いたUnitTestの導入
+# GoogleTestを用いたUnit Testの導入
 - 次に、ユニットテスト環境を導入します
+    - これも、issueに対応するtopicブランチ上で作業します
     - 事前に、`git checkout -b feature-#2-include_unittest` しておきます
 - 今回はGoogleTestを使います https://github.com/google/googletest
 
@@ -318,11 +329,11 @@ git push origin master feature-#1-empty_project
 
 ## GoogleTestの導入
 - 導入方法は https://google.github.io/googletest/quickstart-cmake.html#set-up-a-project に書いてある通りです
-- 公式の方法ではCMakeのFetchContent_DeclareでGoogleTestを取ってきています。が、これは自分の好みになるのですがgitのsubmoduleで管理する方が好きだったりします
-    - 必要になった場合、編集がしやすい
-    - cmakeの設定を色々と弄っていると、buildフォルダを全消しすることがよくあるが、その際に再ダウンロードが不要
+- 公式の方法ではCMakeのFetchContent_DeclareでGoogleTestを取ってきています。が、これは自分の好みになるのですが、外部ライブラリはgitのsubmoduleで管理する方が好きだったりします。理由は以下の通りです
+    - 外部ライブラリのコードを、ちょっと中身を見たり編集をするときに、IDEの設定をしないですぐに開くことができる
+    - cmakeの設定を色々と弄っていると、buildフォルダを全消しすることがよくあるのですが、その際に再ダウンロードが不要
     - (どちらもコードのダウンロード先を変えればいいのですが、それもどこに置くかとか悩むのがだるいので。。。)
-- submodule方式でGoogleTestを導入する場合は以下を実行しておきます。FetchContent_Declareを使う場合はこの手順は不要です
+- git submodule方式でGoogleTestを導入する場合は以下を実行しておきます。FetchContent_Declareを使う場合はこの手順は不要です
 
     ```sh
     mkdir -p test/third_party
@@ -331,13 +342,13 @@ git push origin master feature-#1-empty_project
     git checkout release-1.11.0
     ```
 
-
 - 以下のようなCMakeLists.txtをtest直下に用意します
+    - GoogleTestの取得方法をコメントで切り替えられるようにしています
 
 - [test/CMakeLists.txt](https://github.com/iwatake2222/cpp_project_in_github/blob/03f72fb4c20abba4500c657211ad786adb0c492e/test/CMakeLists.txt)
 
 ## サンプルのテストケースを実装
-- main関数のテストをするわけではないのですが、今後他のモジュール開発者が参考にできるように、`test/main/` というフォルダを作り、その中にシンプルなテストケース例を実装します
+- main関数のテストをするわけではないのですが、今後他の開発者が参考にできるように、`test/main/` というフォルダを作り、その中にシンプルなテストケース例を実装します
 
 - [test/main/CMakeLists.txt](https://github.com/iwatake2222/cpp_project_in_github/blob/03f72fb4c20abba4500c657211ad786adb0c492e/test/main/CMakeLists.txt)
 - [test/main/test_main.cpp](https://github.com/iwatake2222/cpp_project_in_github/blob/03f72fb4c20abba4500c657211ad786adb0c492e/test/main/test_main.cpp)
@@ -362,7 +373,7 @@ Total Test time (real) =   0.06 sec
 ```
 
 上記のように100% tests passedになればOKです。
-ちなみに、testの実行ファイルをそのまま実行すると、かっこいい出力が出ます。が、普段は面倒なのであまり使わないです
+ちなみに、testの実行ファイルをそのまま実行すると、かっこいい出力が出ます。が、普段は面倒なのであまり使わないと思います
 
 ```txt:実行結果(テストの実行ファイル)
 iwatake@iwatake_desktop:/mnt/c/iwatake/devel/devel/cpp_project_in_github/build$ ./test/main/TestMain
@@ -386,12 +397,13 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
 ## マージする
 - 先ほどと同様に、
 - `git push origin feature-#2-include_unittest`
-- GitHub上でプルリク発行
+- GitHub上でプルリク発行。下記コメントを含める
     - Close #2
 - GitHub上でマージ、ブランチ削除
     - https://github.com/iwatake2222/cpp_project_in_github/pull/9
-- `git checkout master`
-- `git pull`
+- masterブランチに戻り、マージ後の最新状態にする
+    - `git checkout master`
+    - `git pull`
 
 
 # GitHub Actionsを用いた、CI/CDの導入
@@ -402,29 +414,30 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
 - CI:
     - masterブランチへpush/プルリクが発生したら、ビルドとテストを実施する
     - 環境は、Windows, Linux, MacOS、Linux(armv7)、Linux(aarch64)
-    - ビルド結果(実行ファイルである`main` ファイル)をダウンロードできるようにする
+    - ビルド結果(実行ファイルである`main.exe` ファイル)をダウンロードできるようにする
 - CD:
     - タグがpushされたら、CIと同等のビルドをする
-    - GitHub上でリリースを行う。その際、ビルド結果の実行ファイルとNOTICE.md等を添付する
+    - GitHub上でリリースを行う。その際、全プラットフォーム向けのビルド結果(実行ファイルである`main.exe` ファイル)とNOTICE.md等を添付する
 
 ## GitHub Actionsの設定 1
-- GitHub Actionsの設定ファイルは`.github/workflows/*.yml` になります。自分で一から書いてもよいのですが、ベースとなるファイルをGitHubのページで作ります
+- GitHub Actionsでは、やりたい処理をworkflowというファイルに記載します
+- Workflowの設定ファイルは`.github/workflows/*.yml` になります。自分で一から書いてもよいのですが、ベースとなるファイルをGitHubのページで作ります
 - リポジトリのトップページ -> Actions を選び、「CMake based projects」をConfigureします
 - その後、ymlファイルを編集する画面になるですが、ひとまずそのままcommitします (右上のStart commitをクリック)
 
 ![](00_doc/githubactions_0.jpg)
 
-- commit完了後、再度Actionsのタブを見ます。すると以下のように今追加したGitHub Actionsが動いているはずです (下記は実行がエラーで終わっています)
+- commit完了後、再度Actionsのタブを見ます。すると以下のように今追加したworkflowが動いているはずです (下記は実行がエラーで終わっています)
 - これからこのyamlファイルを編集していくので、`git pull` しておきます
 - その後、`git checkout -b feature-#3-introduce_cicd` しておきます
 
 ![](00_doc/githubactions_1.jpg)
 
 ## GitHub Actionsの設定 2
-- GitHub Actionsの設定の方針
-    - GitHub Actionsには、何をトリガーにして(on)、どういう処理を実行するか(job)、を記載します
+- Workflowの設定の方針
+    - Workflowには、何をトリガーにして(on)、どういう処理を実行するか(job)、を記載します
     - 今回は、pushが発生したらビルドとテスト、そしてビルド結果をartifactsとして保存。tagがpushされたらリリースをするようにします
-    - リリースする際にはビルドも実行する必要があるため、以下のような全部入りの設定を作ります (お作法的に良いのかどうかは不明。。。)
+    - リリースする際にもビルドを実行する必要があるため、以下のような全部入りの設定を作ります (お作法的に良いのかどうかは不明。。。)
         - ビルドstep
         - テストstep
         - artifactsの保存step
@@ -432,17 +445,17 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
             - 今回、タグ名はチェックせずに、タグが作られたら常にリリースするようにします。本来はプリフィクスが「v」の場合だけリリースを走らせた方がよいです
 - クロスプラットフォームのために
     - GitHub ActionsはデフォルトでWindows, Linux, MacOSという3つの環境で動かすことができます。通常はこれで事足ります
-    - 今回はARM組み込み環境も考慮してみます。GitHub Actions自体はLinuxで動かし、そのうえでrun-on-arch-actioというworkflowを使います
+    - 今回はARM組み込み環境も考慮してみます。GitHub Actions自体はLinuxで動かし、そのうえでrun-on-arch-actioというworkflowを使い、ARM環境上でのビルドなどを実行させます
 - そのため、通常のPC用と組み込みARM用で設定の記載方法がそこそこ異なります。以下のように2つの設定ファイルを作ります。もともとあった`cmake.yml` は削除してOKです
     - [.github/workflows/cmake_x64.yml](https://github.com/iwatake2222/cpp_project_in_github/blob/45822685369dd466225f2ffbc60e21e5242eff45/.github/workflows/cmake_x64.yml)
     - [.github/workflows/cmake_arm.yml](https://github.com/iwatake2222/cpp_project_in_github/blob/45822685369dd466225f2ffbc60e21e5242eff45/.github/workflows/cmake_arm.yml)
 - 本記事では細かい設定の説明は省略させてください
-    - ちなみに、最初の`cmake.yml` でエラーが出たのは、GoogleTestをsubmoduleで含めているためです。FetchContent_DeclareでやっていればOKになっていたかもしれません
+    - ちなみに、最初の`cmake.yml` でエラーが出たのは、GoogleTestをsubmoduleで含めているが、コードの取得を行わなかったためです。FetchContent_DeclareでやっていればOKになっていたかもしれません
 
-## マージしようとする
+## マージしようとする (CIの確認)
 - 先ほどと同様に、
 - `git push origin feature-#3-introduce_cicd`
-- GitHub上でプルリク発行
+- GitHub上でプルリク発行。下記コメントを含める
     - Close #3
 
 - いったんこの状態で、リポジトリのトップページ -> Actionsを見てみます
@@ -458,8 +471,9 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
 - 追加したCIが通ったことを確認したら、先ほどと同様にマージを完了させます
     - https://github.com/iwatake2222/cpp_project_in_github/pull/10
 - GitHub上でマージ、ブランチ削除
-- `git checkout master`
-- `git pull`
+- masterブランチに戻り、マージ後の最新状態にする
+    - `git checkout master`
+    - `git pull`
 
 ## 自動リリース(CD) を確認する
 - 先ほどは、masterへのpush、プルリクが発生した場合にbuildとtestが走るというCIの確認が出来ました
@@ -487,9 +501,9 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
 
 ## CodeQLのworkflow設定
 - CodeQLのworkflowはデフォルトではautobuildというworkflowを使って、自動でいい感じにビルドしようとしてくれます
-- しかし、本プロジェクトはGoogleTestのためにgit submoduleを使っています。そのため、なにも考慮しないとソースコードがないとエラーが出てしまいます
+- しかし、今回はGoogleTestのためにgit submoduleを使っています。そのため、何も考慮をしないとソースコードがないとエラーが出てしまいます
 - 以下の対応策があります
-    - コマンドに`git submodule update --init --recursive --recommend-shallow --depth 1` をついかする
+    - コマンドに`git submodule update --init --recursive --recommend-shallow --depth 1` を追加してGoogleTestのコードを取得する
     - テストを省略する
 - 今回はテストを省略することにします。理由はテスト自体はCIで走るし、他プロジェクトのコードにまで静的解析をかけたくないためです
     - GoogleTestレベルなら問題ないと思いますが、場合によってはサードパーティのコードで警告が出まくる可能性があって面倒です
@@ -506,7 +520,7 @@ buffer[3] = 1;
 ```
 
 ## READMEにバッジの追加
-- せっかくCICDを導入したので、そのステータスがわかるようにバッジをREADMEに追加します
+- ちょっと話がずれますが、せっかくCICDを導入したので、そのステータスがわかるようにバッジをREADMEに追加します
     - (このタイミングで入れるのは微妙ですが、ついでに追加してしまいます)
 - Actionsのページで各workflowを選んだあと、右側の・・・をクリックすると、「Create status badge」が出てきます。それを選ぶことで、以下のようなリンクを取得できます
     - `[![CMake_x64](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_x64.yml/badge.svg)](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_x64.yml)`
@@ -519,16 +533,16 @@ buffer[3] = 1;
 ## マージしようとする
 - 先ほどと同様に、マージします
 - `git push origin feature-#11-codeql`
-- GitHub上でプルリク発行
+- GitHub上でプルリク発行。下記コメントを含める
     - Close #11
 
 ## CodeQLの結果を確認する
 - プルリクに紐づいたWorkflowが完了するのを待ちます
 - リポジトリのトップページ -> Security -> View alertsをクリックします
-- デフォルトだとmasterブランチの状態しか表示sれないので、Filterを以下のようにします
+- デフォルトだとmasterブランチの状態しか表示されないので、Filterを以下のようにします
     - `is:open branch:master pr:12`
     - 最後の数字はプルリクの番号なので適宜変更してください
-- すると、以下のように警告が出力されていることがわかります.
+- すると、以下のように警告が出力されていることがわかります
 - また、プルリクのページを見ても、エラーが出ていることがわかります
 
 ![](00_doc/codeql_2.jpg)
@@ -543,13 +557,15 @@ buffer[3] = 1;
 ## マージ完了する
 - プルリクの画面で、全ての警告が消えたことを確認したらマージ、ブランチ削除
     - https://github.com/iwatake2222/cpp_project_in_github/pull/12
-- `git checkout master`
-- `git pull`
+- masterブランチに戻り、マージ後の最新状態にする
+    - `git checkout master`
+    - `git pull`
 
 # その他の設定
 - ここまでで、僕が思う、やっておいた方がいいかなという設定は終わりです
-- 他には以下のような設定もしていいかもしれません
+- 他には以下のようなことをしてもいいかもしれません
     - masterブランチへの直push禁止
+    - masterブランチへのpush -f 禁止
     - GitHub Pagesとの連携
 
 # 開発を進める
@@ -568,12 +584,13 @@ buffer[3] = 1;
 3. 機能を実装する
 4. テストを実装してpassさせる
 5. pushする
-    - `git add .` , `git commit -m "ooo"`
+    - `git add .`
+    - `git commit -m "ooo"`
     - `git push origin feature-#123-ooo`
 6. GitHub上でプルリクを投げる
     - その際、コメントに`Close #123` または、`Fix #123` を記載
 7. 誰かがレビューして、マージ
-8. masterブランチに戻る
+8. masterブランチに戻り、マージ後の最新状態にする
     - `git checkout master`
     - `git pull`
 
@@ -583,7 +600,11 @@ buffer[3] = 1;
     - `git push origin 20211228`
         - 一般的にはプリフィックスにvを付ける
 
-## GoogleTestのもう少し複雑なバージョンのひな形
+## 開発完了後
+- 一通りの開発が完了したら、KANBANとマイルストーンはいったん使わなくなると思います
+- バグやユーザからのフィードバックがあればissueを追加して、適宜対応していく感じになると思います
+
+## GoogleTestのもう少し複雑なサンプル
 - 本記事はGitHubの設定がメインのため、ソフトウェア構造は単純にし、テストも簡単になっています
 - 実際の開発では複数のモジュールが入り混じるため、DI (Dependency Injection)やMockが必要になります
 - 下記プロジェクトでは、本記事と同じ電卓を、Prompt(入出力を管理するモジュール)、Arithmetic(計算をつかさどるモジュール)、Calculator(左記2つのモジュールを呼び出す)という3つのモジュールに分けて実装、テストしています
