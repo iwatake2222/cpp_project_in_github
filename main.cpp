@@ -20,6 +20,7 @@ limitations under the License.
 #include <memory>
 #include <vector>
 #include <string>
+#include <stdexcept>
 
 #include "calculator.h"
 
@@ -32,14 +33,26 @@ limitations under the License.
 /*** Function ***/
 int main(int argc, char* argv[])
 {
-    char op;
-    int32_t a = 0;
-    int32_t b = 0;
     std::cout << ">";
-    std::cin >> a >> op  >> b;
-    Calculator calc;
-    int32_t ans = calc.Run(op, a, b);
-    std::cout << std::to_string(a) + " " + op + " " + std::to_string(b) + " = " + std::to_string(ans) << std::endl;
+    std::string str_a, str_op, str_b;
+    std::cin >> str_a >> str_op >> str_b;
+    try {
+        int32_t a = std::stoi(str_a);
+        char op = str_op[0];
+        int32_t b = std::stoi(str_b);
+
+        Calculator calc;
+        int32_t ans = calc.Run(op, a, b);
+        std::cout << std::to_string(a) + " " + op + " " + std::to_string(b) + " = " + std::to_string(ans) << std::endl;
+    } catch (const std::invalid_argument& e) {
+        std::cout << "[Exception][Invalid Argument]: " << e.what() << std::endl;
+    } catch (const std::out_of_range & e) {
+        std::cout << "[Exception][Out of Range]: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "[Exception]: " << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "[Exception]: " << std::endl;
+    }
 
     /* Cause security warning */
     // char buffer[1];
