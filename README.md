@@ -53,7 +53,7 @@ ctest
 
 # GitHubでC++プロジェクトを開発する際にやっておきたい設定
 - 簡単な電卓アプリ開発を例に、以下を行います
-    - GitHub上でのIssueテンプレート、マイルストーン、Projectsの設定
+    - GitHub上でのIssueテンプレート、マイルストーン、Projects(カンバンボード)の設定
     - GitHub Flowを例にした簡単な開発の流れの説明
     - CMakeを用いた、C++プロジェクトの用意
     - GoogleTestを用いたUnit Testの導入
@@ -81,7 +81,7 @@ ctest
 
 *趣味の開発の場合は、上記のようなものを作りたいと、何となく頭に浮かんできた、という状態をイメージしてください。この場合スケジュールはないと思います。(それでもある程度の目標はあった方がよいかと思いますが)
 
-# GitHub上でプロジェクトを用意する
+# GitHub上でリポジトリを用意する
 ## GitHubのNew repositoryからリポジトリを作る
 - 本記事では、最初にGitHubのwebサイト上でリポジトリを作ります (先にローカルで作っていても、後から追加できます)
     - 名前は、「cpp_project_in_github」とします
@@ -168,7 +168,7 @@ ctest
 
 ## Issueの追加
 - リポジトリのトップページ -> Issues -> Feature requestから作成します
-    - Feature requestではないような気もしますが。。。気になる場合は別のissue templateを作成してください
+    - Feature 「request」ではないような気もしますが。。。気になる場合は別のissue templateを作成してください
 - 例えば以下のようなissueを追加します。環境整備系も追加しておきます
     - 空プロジェクトの用意
     - ユニットテスト環境の用意
@@ -343,7 +343,7 @@ git push origin master feature-#1-empty_project
     ```
 
 - 以下のようなCMakeLists.txtをtest直下に用意します
-    - GoogleTestのinclude方法をコメントで切り替えられるようにしています
+    - GoogleTestの取得方法をコメントで切り替えられるようにしています
 
 - [test/CMakeLists.txt](https://github.com/iwatake2222/cpp_project_in_github/blob/03f72fb4c20abba4500c657211ad786adb0c492e/test/CMakeLists.txt)
 
@@ -401,8 +401,9 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
     - Close #2
 - GitHub上でマージ、ブランチ削除
     - https://github.com/iwatake2222/cpp_project_in_github/pull/9
-- `git checkout master`
-- `git pull`
+- masterブランチに戻り、マージ後の最新状態にする
+    - `git checkout master`
+    - `git pull`
 
 
 # GitHub Actionsを用いた、CI/CDの導入
@@ -419,7 +420,7 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
     - GitHub上でリリースを行う。その際、全プラットフォーム向けのビルド結果(実行ファイルである`main.exe` ファイル)とNOTICE.md等を添付する
 
 ## GitHub Actionsの設定 1
-- GitHub Actionsでは、やりたい処理をWorkflowというファイルに記載します
+- GitHub Actionsでは、やりたい処理をworkflowというファイルに記載します
 - Workflowの設定ファイルは`.github/workflows/*.yml` になります。自分で一から書いてもよいのですが、ベースとなるファイルをGitHubのページで作ります
 - リポジトリのトップページ -> Actions を選び、「CMake based projects」をConfigureします
 - その後、ymlファイルを編集する画面になるですが、ひとまずそのままcommitします (右上のStart commitをクリック)
@@ -433,10 +434,10 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
 ![](00_doc/githubactions_1.jpg)
 
 ## GitHub Actionsの設定 2
-- GitHub Actionsの設定の方針
+- Workflowの設定の方針
     - Workflowには、何をトリガーにして(on)、どういう処理を実行するか(job)、を記載します
     - 今回は、pushが発生したらビルドとテスト、そしてビルド結果をartifactsとして保存。tagがpushされたらリリースをするようにします
-    - リリースする際にはビルドも実行する必要があるため、以下のような全部入りの設定を作ります (お作法的に良いのかどうかは不明。。。)
+    - リリースする際にもビルドを実行する必要があるため、以下のような全部入りの設定を作ります (お作法的に良いのかどうかは不明。。。)
         - ビルドstep
         - テストstep
         - artifactsの保存step
@@ -454,7 +455,7 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
 ## マージしようとする (CIの確認)
 - 先ほどと同様に、
 - `git push origin feature-#3-introduce_cicd`
-- GitHub上でプルリク発行
+- GitHub上でプルリク発行。下記コメントを含める
     - Close #3
 
 - いったんこの状態で、リポジトリのトップページ -> Actionsを見てみます
@@ -470,8 +471,9 @@ Running main() from /mnt/c/iwatake/devel/devel/cpp_project_in_github/test/third_
 - 追加したCIが通ったことを確認したら、先ほどと同様にマージを完了させます
     - https://github.com/iwatake2222/cpp_project_in_github/pull/10
 - GitHub上でマージ、ブランチ削除
-- `git checkout master`
-- `git pull`
+- masterブランチに戻り、マージ後の最新状態にする
+    - `git checkout master`
+    - `git pull`
 
 ## 自動リリース(CD) を確認する
 - 先ほどは、masterへのpush、プルリクが発生した場合にbuildとtestが走るというCIの確認が出来ました
@@ -518,7 +520,7 @@ buffer[3] = 1;
 ```
 
 ## READMEにバッジの追加
-- せっかくCICDを導入したので、そのステータスがわかるようにバッジをREADMEに追加します
+- ちょっと話がずれますが、せっかくCICDを導入したので、そのステータスがわかるようにバッジをREADMEに追加します
     - (このタイミングで入れるのは微妙ですが、ついでに追加してしまいます)
 - Actionsのページで各workflowを選んだあと、右側の・・・をクリックすると、「Create status badge」が出てきます。それを選ぶことで、以下のようなリンクを取得できます
     - `[![CMake_x64](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_x64.yml/badge.svg)](https://github.com/iwatake2222/cpp_project_in_github/actions/workflows/cmake_x64.yml)`
@@ -531,7 +533,7 @@ buffer[3] = 1;
 ## マージしようとする
 - 先ほどと同様に、マージします
 - `git push origin feature-#11-codeql`
-- GitHub上でプルリク発行
+- GitHub上でプルリク発行。下記コメントを含める
     - Close #11
 
 ## CodeQLの結果を確認する
@@ -555,8 +557,9 @@ buffer[3] = 1;
 ## マージ完了する
 - プルリクの画面で、全ての警告が消えたことを確認したらマージ、ブランチ削除
     - https://github.com/iwatake2222/cpp_project_in_github/pull/12
-- `git checkout master`
-- `git pull`
+- masterブランチに戻り、マージ後の最新状態にする
+    - `git checkout master`
+    - `git pull`
 
 # その他の設定
 - ここまでで、僕が思う、やっておいた方がいいかなという設定は終わりです
@@ -587,7 +590,7 @@ buffer[3] = 1;
 6. GitHub上でプルリクを投げる
     - その際、コメントに`Close #123` または、`Fix #123` を記載
 7. 誰かがレビューして、マージ
-8. masterブランチに戻る
+8. masterブランチに戻り、マージ後の最新状態にする
     - `git checkout master`
     - `git pull`
 
